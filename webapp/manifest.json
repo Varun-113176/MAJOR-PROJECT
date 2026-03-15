@@ -15,6 +15,7 @@
       "version": "1.20.4",
       "toolsId": "39f6710f-1caa-487b-942a-dc5b437bbc83"
     },
+
     "dataSources": {
       "mainService": {
         "uri": "/V2/Northwind/Northwind.svc/",
@@ -27,24 +28,20 @@
       }
     }
   },
+
   "sap.ui": {
     "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
     "deviceTypes": {
       "desktop": true,
       "tablet": true,
       "phone": true
     }
   },
+
   "sap.ui5": {
+
     "flexEnabled": true,
+
     "dependencies": {
       "minUI5Version": "1.145.0",
       "libs": {
@@ -52,23 +49,29 @@
         "sap.ui.core": {}
       }
     },
+
     "contentDensities": {
       "compact": true,
       "cozy": true
     },
+
     "models": {
+
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "com.varun.project2.fioriproject.i18n.i18n"
         }
       },
+
       "": {
         "dataSource": "mainService",
         "preload": true,
         "settings": {}
       }
+
     },
+
     "resources": {
       "css": [
         {
@@ -76,7 +79,9 @@
         }
       ]
     },
+
     "routing": {
+
       "config": {
         "routerClass": "sap.m.routing.Router",
         "controlAggregation": "pages",
@@ -85,30 +90,64 @@
         "type": "View",
         "viewType": "XML",
         "path": "com.varun.project2.fioriproject.view",
-        "async": true,
-        "viewPath": "com.varun.project2.fioriproject.view"
+        "async": true
       },
+
       "routes": [
         {
-          "name": "RouteMain",
-          "pattern": ":?query:",
-          "target": [
-            "TargetMain"
-          ]
+          "name": "Main",
+          "pattern": "",
+          "target": "Main"
+        },
+        {
+          "name": "HR",
+          "pattern": "hr",
+          "target": "HR"
+        },
+        {
+          "name": "Admin",
+          "pattern": "admin",
+          "target": "Admin"
+        },
+        {
+          "name": "Employee",
+          "pattern": "employee",
+          "target": "Employee"
         }
       ],
+
       "targets": {
-        "TargetMain": {
-          "id": "Main",
-          "name": "Main"
+
+        "Main": {
+          "viewName": "Main",
+          "viewId": "Main"
+        },
+
+        "HR": {
+          "viewName": "HR",
+          "viewId": "HR"
+        },
+
+        "Admin": {
+          "viewName": "Admin",
+          "viewId": "Admin"
+        },
+
+        "Employee": {
+          "viewName": "Employee",
+          "viewId": "Employee"
         }
+
       }
+
     },
+
     "rootView": {
       "viewName": "com.varun.project2.fioriproject.view.App",
       "type": "XML",
       "id": "App",
       "async": true
     }
+
   }
 }

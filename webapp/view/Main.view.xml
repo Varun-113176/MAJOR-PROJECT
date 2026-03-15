@@ -1,7 +1,52 @@
-<mvc:View controllerName="com.varun.project2.fioriproject.controller.Main"
+<mvc:View
+    controllerName="com.varun.project2.fioriproject.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    <Text id="_IDGenText">hi</Text>
+
+    <Page
+        id="mainPage"
+        title="Enterprise Project and Time Sheet Governance System"
+        class="sapUiResponsiveContentPadding">
+
+        <!-- Header Buttons -->
+        <headerContent>
+            <Button
+                id="btnHR"
+                text="HR"
+                type="Emphasized"
+                icon="sap-icon://employee"
+                press="onHRPress" />
+
+            <Button
+                id="btnAdmin"
+                text="Admin"
+                type="Emphasized"
+                icon="sap-icon://manager"
+                press="onAdminPress" />
+        </headerContent>
+
+        <!-- Dashboard Content -->
+        <content>
+            <VBox
+                id="dashboardBox"
+                width="100%"
+                height="100%"
+                justifyContent="Center"
+                alignItems="Center">
+
+                <Title
+                    id="dashboardTitle"
+                    text="Welcome to the Dashboard"
+                    level="H2" />
+
+                <Text
+                    id="dashboardText"
+                    text="Please choose your role from the top right corner."
+                    class="sapUiSmallMarginTop" />
+
+            </VBox>
+        </content>
+
     </Page>
+
 </mvc:View>
