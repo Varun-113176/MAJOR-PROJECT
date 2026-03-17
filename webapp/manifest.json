@@ -6,7 +6,7 @@
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
+    "description": "{{appDescription}",
 
     "applicationVersion": {
       "version": "0.0.1"
@@ -38,7 +38,8 @@
       "minUI5Version": "1.145.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.viz": {}
       }
     },
 
@@ -93,27 +94,30 @@
           "name": "Employee",
           "pattern": "employee/{empName}",
           "target": "Employee"
+        },
+        {
+          "name": "Analytics",
+          "pattern": "analytics/{empName}",
+          "target": "Analytics"
         }
       ],
 
       "targets": {
-
         "Main": {
           "viewName": "Main"
         },
-
         "HR": {
           "viewName": "HR"
         },
-
         "Admin": {
           "viewName": "Admin"
         },
-
         "Employee": {
           "viewName": "Employee"
+        },
+        "Analytics": {
+          "viewName": "Analytics"
         }
-
       }
 
     },

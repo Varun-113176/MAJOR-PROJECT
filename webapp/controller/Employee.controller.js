@@ -169,28 +169,24 @@ sap.ui.define([
 
                 MessageToast.show("Employee Added Successfully");
 
-                // 🔥 AUTO NAVIGATION
                 this._selectNewEmployee(oNewRow);
             }
 
             this._oDialog.close();
         },
 
-        /* ================= NAVIGATION ================= */
+        /* ================= NAVIGATION (UPDATED 🔥) ================= */
 
         onNavigate: function (oEvent) {
 
             var oItem = oEvent.getSource().getParent().getParent();
-            var aCells = oItem.getCells();
+            var sName = oItem.getCells()[1].getText();
 
-            MessageBox.information(
-                "Employee Details:\n\n" +
-                "Name: " + aCells[1].getText() + "\n" +
-                "Role: " + aCells[2].getText() + "\n" +
-                "City: " + aCells[3].getText() + "\n" +
-                "Phone: " + aCells[4].getText() + "\n" +
-                "Email: " + aCells[5].getText()
-            );
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+            oRouter.navTo("Analytics", {
+                empName: sName
+            });
         },
 
         _selectNewEmployee: function (oRow) {

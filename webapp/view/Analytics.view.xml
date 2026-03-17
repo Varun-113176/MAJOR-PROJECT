@@ -1,0 +1,49 @@
+<mvc:View
+    controllerName="com.varun.project2.fioriproject.controller.Analytics"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+<Page title="Employee Histogram">
+
+    <content>
+
+        <VBox class="sapUiMediumMargin">
+
+            <Title text="Monthly Attendance Histogram"/>
+
+            <viz:VizFrame
+                id="histogramChart"
+                vizType="column"
+                height="400px">
+
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/chartData}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Month" value="{month}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Present" value="{present}"/>
+                            <viz.data:MeasureDefinition name="Leave" value="{leave}"/>
+                            <viz.data:MeasureDefinition name="Half Day" value="{halfday}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+                        values="Present,Leave,Half Day"/>
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+                        values="Month"/>
+                </viz:feeds>
+
+            </viz:VizFrame>
+
+        </VBox>
+
+    </content>
+
+</Page>
+</mvc:View>
