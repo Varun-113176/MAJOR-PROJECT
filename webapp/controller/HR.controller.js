@@ -1,207 +1,270 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "sap/m/Dialog",
-    "sap/m/VBox",
-    "sap/m/Input",
-    "sap/m/CheckBox",
-    "sap/m/Button",
-    "sap/m/MessageBox",
-    "sap/m/Select",
-    "sap/ui/core/Item",
-    "sap/m/MessageToast"
+"sap/ui/core/mvc/Controller",
+"sap/m/Dialog",
+"sap/m/VBox",
+"sap/m/Input",
+"sap/m/CheckBox",
+"sap/m/Button",
+"sap/m/MessageBox",
+"sap/m/Select",
+"sap/ui/core/Item",
+"sap/m/MessageToast"
 ], function (
-    Controller,
-    Dialog,
-    VBox,
-    Input,
-    CheckBox,
-    Button,
-    MessageBox,
-    Select,
-    Item,
-    MessageToast
+Controller,
+Dialog,
+VBox,
+Input,
+CheckBox,
+Button,
+MessageBox,
+Select,
+Item,
+MessageToast
 ) {
-    "use strict";
 
-    return Controller.extend("com.varun.project2.fioriproject.controller.HR", {
+"use strict";
 
-        /* SHOW PASSWORD */
-        onShowPassword: function (oEvent) {
-            this.byId("passwordInput")
-                .setType(oEvent.getParameter("selected") ? "Text" : "Password");
-        },
+return Controller.extend("com.varun.project2.fioriproject.controller.HR", {
 
-        /* LOGIN */
-        onLogin: function () {
+onInit: function () {
 
-            var sEmail = this.byId("emailInput").getValue();
-            var sPassword = this.byId("passwordInput").getValue();
+var oRouter = this.getOwnerComponent().getRouter();
+oRouter.getRoute("HR").attachPatternMatched(this._clearFields, this);
 
-            var aUsers = JSON.parse(localStorage.getItem("HRUsers")) || [];
+},
 
-            var oUser = aUsers.find(function (u) {
-                return u.email === sEmail;
-            });
+_clearFields: function () {
 
-            if (!oUser) {
-                MessageBox.error("This email does not exist. Please signup first.");
-                return;
-            }
+this.byId("emailInput").setValue("");
+this.byId("passwordInput").setValue("");
 
-            if (oUser.password !== sPassword) {
-                MessageBox.error("Incorrect password");
-                return;
-            }
+},
 
-            MessageToast.show("Login Successful");
+onShowPassword: function (oEvent) {
 
-            const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("Employee");
-        },
+this.byId("passwordInput")
+.setType(oEvent.getParameter("selected") ? "Text" : "Password");
 
-        /* OPEN SIGNUP */
-        onOpenSignup: function () {
+},
 
-            if (!this._oSignupDialog) {
-                this._oSignupDialog = this._createSignupDialog();
-            }
+onLogin: function () {
 
-            this._oSignupDialog.open();
-        },
+var sEmail = this.byId("emailInput").getValue();
+var sPassword = this.byId("passwordInput").getValue();
 
-        /* CREATE SIGNUP DIALOG */
-        _createSignupDialog: function () {
+var aUsers = JSON.parse(localStorage.getItem("HRUsers")) || [];
 
-            var oFirstName = new Input({ placeholder: "First Name" });
+var oUser = aUsers.find(function (u) {
+return u.email === sEmail;
+});
 
-            var oLastName = new Input({
-                placeholder: "Last Name",
-                class: "sapUiSmallMarginTop"
-            });
+if (!oUser) {
+MessageBox.error("This HR email does not exist. Please signup first.");
+return;
+}
 
-            var oEmail = new Input({
-                placeholder: "Email Address",
-                type: "Email",
-                class: "sapUiSmallMarginTop"
-            });
+if (oUser.password !== sPassword) {
+MessageBox.error("Incorrect password");
+return;
+}
 
-            /* DEPARTMENT DROPDOWN */
+MessageToast.show("HR Login Successful");
 
-            var oDept = new Select({
+// ✅ ONLY CHANGE (navigation)
+this.getOwnerComponent().getRouter().navTo("Employee", {
+    empName: sEmail
+});
 
-                class: "sapUiSmallMarginTop",
+},
 
-                items: [
-                    new Item({ key: "TA", text: "Talent Acquisition (Recruitment)" }),
-                    new Item({ key: "TD", text: "Training & Development" }),
-                    new Item({ key: "CB", text: "Compensation & Benefits" }),
-                    new Item({ key: "ER", text: "Employee Relations" }),
-                    new Item({ key: "CO", text: "Compliance" }),
-                    new Item({ key: "PR", text: "Payroll" }),
-                    new Item({ key: "PM", text: "Performance Management" })
-                ]
+onOpenSignup: function () {
 
-            });
+if (!this._oSignupDialog) {
+this._oSignupDialog = this._createSignupDialog();
+}
 
-            var oPass = new Input({
-                placeholder: "Password",
-                type: "Password",
-                class: "sapUiSmallMarginTop"
-            });
+this._oSignupDialog.open();
 
-            var oConfirm = new Input({
-                placeholder: "Confirm Password",
-                type: "Password",
-                class: "sapUiSmallMarginTop"
-            });
+},
 
-            var oDialog = new Dialog({
+_createSignupDialog: function () {
 
-                title: "Register",
-                contentWidth: "380px",
+var oFirst = new Input({placeholder:"First Name"});
+var oLast = new Input({placeholder:"Last Name",class:"sapUiSmallMarginTop"});
+var oEmail = new Input({placeholder:"HR Email",type:"Email",class:"sapUiSmallMarginTop"});
 
-                content: new VBox({
-                    class: "sapUiMediumMargin",
-                    items: [
-                        oFirstName,
-                        oLastName,
-                        oEmail,
-                        oDept,
-                        oPass,
-                        oConfirm,
-                        new CheckBox({
-                            text: "I Agree to Terms & Conditions",
-                            class: "sapUiSmallMarginTop"
-                        })
-                    ]
-                }),
+var oDept = new Select({
 
-                beginButton: new Button({
+class:"sapUiSmallMarginTop",
 
-                    text: "Register",
-                    type: "Emphasized",
+items:[
+new Item({key:"TA",text:"Talent Acquisition"}),
+new Item({key:"TD",text:"Training & Development"}),
+new Item({key:"CB",text:"Compensation & Benefits"}),
+new Item({key:"ER",text:"Employee Relations"}),
+new Item({key:"PR",text:"Payroll"})
+]
 
-                    press: function () {
+});
 
-                        var email = oEmail.getValue();
-                        var password = oPass.getValue();
+var oPass = new Input({placeholder:"Password",type:"Password",class:"sapUiSmallMarginTop"});
+var oConfirm = new Input({placeholder:"Confirm Password",type:"Password",class:"sapUiSmallMarginTop"});
 
-                        /* EMAIL VALIDATION */
+var oDialog = new Dialog({
 
-                        var emailRegex =
-                            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+title:"HR Register",
+contentWidth:"380px",
 
-                        if (!emailRegex.test(email)) {
-                            MessageBox.error("Enter valid email format");
-                            return;
-                        }
+content:new VBox({
+class:"sapUiMediumMargin",
+items:[
+oFirst,
+oLast,
+oEmail,
+oDept,
+oPass,
+oConfirm,
+new CheckBox({text:"I Agree to Terms & Conditions"})
+]
+}),
 
-                        /* PASSWORD VALIDATION */
+beginButton:new Button({
 
-                        var passRegex =
-                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+text:"Register",
+type:"Emphasized",
 
-                        if (!passRegex.test(password)) {
-                            MessageBox.error(
-                                "Password must contain:\n• 8 characters\n• 1 uppercase\n• 1 lowercase\n• 1 number\n• 1 special character"
-                            );
-                            return;
-                        }
+press:function(){
 
-                        if (password !== oConfirm.getValue()) {
-                            MessageBox.error("Passwords do not match");
-                            return;
-                        }
+var email=oEmail.getValue();
+var password=oPass.getValue();
 
-                        var aUsers = JSON.parse(localStorage.getItem("HRUsers")) || [];
+var emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-                        aUsers.push({
-                            firstname: oFirstName.getValue(),
-                            lastname: oLastName.getValue(),
-                            email: email,
-                            department: oDept.getSelectedItem().getText(),
-                            password: password
-                        });
+if(!emailRegex.test(email)){
+MessageBox.error("Enter valid email format");
+return;
+}
 
-                        localStorage.setItem("HRUsers", JSON.stringify(aUsers));
+var passRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-                        MessageBox.success("Registered Successfully");
+if(!passRegex.test(password)){
+MessageBox.error("Password must contain 8 characters, uppercase, lowercase, number and special character");
+return;
+}
 
-                        oDialog.close();
-                    }
+if(password!==oConfirm.getValue()){
+MessageBox.error("Passwords do not match");
+return;
+}
 
-                }),
+var aUsers=JSON.parse(localStorage.getItem("HRUsers"))||[];
 
-                endButton: new Button({
-                    text: "Close",
-                    press: function () {
-                        oDialog.close();
-                    }
-                })
-            });
+if(aUsers.some(function(u){return u.email===email;})){
+MessageBox.error("HR already registered");
+return;
+}
 
-            return oDialog;
-        }
+aUsers.push({
+firstname:oFirst.getValue(),
+lastname:oLast.getValue(),
+email:email,
+department:oDept.getSelectedItem().getText(),
+password:password
+});
 
-    });
+localStorage.setItem("HRUsers",JSON.stringify(aUsers));
+
+MessageBox.success("HR Signup Successful");
+
+oDialog.close();
+
+}
+
+}),
+
+endButton:new Button({
+text:"Close",
+press:function(){oDialog.close();}
+})
+
+});
+
+return oDialog;
+
+},
+
+onForgotPassword:function(){
+
+if(!this._oForgotDialog){
+this._oForgotDialog=this._createForgotDialog();
+}
+
+this._oForgotDialog.open();
+
+},
+
+_createForgotDialog:function(){
+
+var oEmail=new Input({placeholder:"HR Email",type:"Email"});
+var oNewPass=new Input({placeholder:"New Password",type:"Password",class:"sapUiSmallMarginTop"});
+var oRePass=new Input({placeholder:"Re-enter Password",type:"Password",class:"sapUiSmallMarginTop"});
+
+var oDialog=new Dialog({
+
+title:"Reset Password",
+
+content:new VBox({
+class:"sapUiMediumMargin",
+items:[oEmail,oNewPass,oRePass]
+}),
+
+beginButton:new Button({
+
+text:"Submit",
+type:"Emphasized",
+
+press:function(){
+
+var email=oEmail.getValue();
+var newPass=oNewPass.getValue();
+var rePass=oRePass.getValue();
+
+if(newPass!==rePass){
+MessageBox.error("Passwords do not match");
+return;
+}
+
+var aUsers=JSON.parse(localStorage.getItem("HRUsers"))||[];
+
+var oUser=aUsers.find(function(u){return u.email===email;});
+
+if(!oUser){
+MessageBox.error("HR email not found");
+return;
+}
+
+oUser.password=newPass;
+
+localStorage.setItem("HRUsers",JSON.stringify(aUsers));
+
+MessageBox.success("Password Reset Successful");
+
+oDialog.close();
+
+}
+
+}),
+
+endButton:new Button({
+text:"Cancel",
+press:function(){oDialog.close();}
+})
+
+});
+
+return oDialog;
+
+}
+
+});
 });

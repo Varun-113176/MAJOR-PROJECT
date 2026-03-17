@@ -3,25 +3,25 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
 
-<Page id="_IDGenPage"
+<Page
     title="HR Login"
     class="sapUiResponsiveContentPadding">
 
     <content>
 
-        <VBox id="_IDGenVBox1" height="100%"
+        <VBox height="100%"
               alignItems="Center"
               justifyContent="Center">
 
-            <Panel id="_IDGenPanel" width="360px"
+            <Panel width="360px"
                    class="sapUiSmallMargin"
                    backgroundDesign="Solid">
 
-                <VBox id="_IDGenVBox4" alignItems="Center"
+                <VBox alignItems="Center"
                       class="sapUiMediumMargin">
 
-                    <!-- LOGIN TITLE -->
-                    <Title id="_IDGenTitle"
+                    <!-- TITLE -->
+                    <Title
                         text="Login"
                         level="H2"
                         class="sapUiSmallMarginBottom"/>
@@ -29,7 +29,7 @@
                     <!-- EMAIL -->
                     <Input
                         id="emailInput"
-                        placeholder="Email"
+                        placeholder="HR Email"
                         type="Email"
                         width="100%"
                         required="true"
@@ -45,27 +45,29 @@
                         class="sapUiSmallMarginBottom"/>
 
                     <!-- SHOW PASSWORD -->
-                    <CheckBox id="_IDGenCheckBox"
+                    <CheckBox
                         text="Show Password"
                         select="onShowPassword"
                         class="sapUiSmallMarginBottom"/>
 
                     <!-- LOGIN BUTTON -->
-                    <Button id="_IDGenButton2"
+                    <Button
                         text="SIGN IN"
                         type="Emphasized"
                         width="100%"
                         press="onLogin"
                         class="sapUiMediumMarginBottom"/>
 
-                    <!-- LINKS -->
-                    <Text id="_IDGenText"
-                        text="Forgot Username / Password?"
+                    <!-- FORGOT PASSWORD -->
+                    <Link
+                        text="Forgot Password?"
+                        press="onForgotPassword"
                         class="sapUiTinyMarginBottom"/>
 
-                    <HBox id="_IDGenHBox1">
-                        <Text id="_IDGenText1" text="Don't have an account? "/>
-                        <Link id="_IDGenLink1"
+                    <!-- SIGNUP -->
+                    <HBox>
+                        <Text text="Don't have an account? "/>
+                        <Link
                             text="Sign up"
                             press="onOpenSignup"/>
                     </HBox>

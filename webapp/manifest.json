@@ -1,19 +1,15 @@
 {
   "_version": "1.82.0",
+
   "sap.app": {
     "id": "com.varun.project2.fioriproject",
     "type": "application",
     "i18n": "i18n/i18n.properties",
-    "applicationVersion": {
-      "version": "0.0.1"
-    },
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
-    "resources": "resources.json",
-    "sourceTemplate": {
-      "id": "@sap/generator-fiori:basic",
-      "version": "1.20.4",
-      "toolsId": "39f6710f-1caa-487b-942a-dc5b437bbc83"
+
+    "applicationVersion": {
+      "version": "0.0.1"
     },
 
     "dataSources": {
@@ -21,8 +17,6 @@
         "uri": "/V2/Northwind/Northwind.svc/",
         "type": "OData",
         "settings": {
-          "annotations": [],
-          "localUri": "localService/mainService/metadata.xml",
           "odataVersion": "2.0"
         }
       }
@@ -40,19 +34,12 @@
 
   "sap.ui5": {
 
-    "flexEnabled": true,
-
     "dependencies": {
       "minUI5Version": "1.145.0",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {}
       }
-    },
-
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
     },
 
     "models": {
@@ -65,31 +52,24 @@
       },
 
       "": {
+        "type": "sap.ui.model.odata.v2.ODataModel",
         "dataSource": "mainService",
-        "preload": true,
-        "settings": {}
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "useBatch": true
+        }
       }
 
-    },
-
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
     },
 
     "routing": {
 
       "config": {
         "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "transition": "slide",
-        "type": "View",
         "viewType": "XML",
-        "path": "com.varun.project2.fioriproject.view",
+        "viewPath": "com.varun.project2.fioriproject.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
         "async": true
       },
 
@@ -111,7 +91,7 @@
         },
         {
           "name": "Employee",
-          "pattern": "employee",
+          "pattern": "employee/{empName}",
           "target": "Employee"
         }
       ],
@@ -119,23 +99,19 @@
       "targets": {
 
         "Main": {
-          "viewName": "Main",
-          "viewId": "Main"
+          "viewName": "Main"
         },
 
         "HR": {
-          "viewName": "HR",
-          "viewId": "HR"
+          "viewName": "HR"
         },
 
         "Admin": {
-          "viewName": "Admin",
-          "viewId": "Admin"
+          "viewName": "Admin"
         },
 
         "Employee": {
-          "viewName": "Employee",
-          "viewId": "Employee"
+          "viewName": "Employee"
         }
 
       }
@@ -145,7 +121,7 @@
     "rootView": {
       "viewName": "com.varun.project2.fioriproject.view.App",
       "type": "XML",
-      "id": "App",
+      "id": "app",
       "async": true
     }
 

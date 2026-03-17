@@ -1,0 +1,79 @@
+<mvc:View
+    controllerName="com.varun.project2.fioriproject.controller.Employee"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+<Page title="Employee Dashboard">
+
+    <content>
+
+        <VBox alignItems="Center">
+            <Title text="Employee Dashboard"/>
+            <Text id="welcomeText"/>
+        </VBox>
+
+        <Toolbar>
+
+            <SearchField
+                width="20rem"
+                placeholder="Search Employee"
+                liveChange="onSearch"/>
+
+            <ToolbarSpacer/>
+
+            <Button text="Create" press="onCreate" type="Emphasized"/>
+            <Button text="Update" press="onUpdate" type="Emphasized"/>
+            <Button text="Comment" press="onExcel"/>
+
+        </Toolbar>
+
+        <Table
+            id="employeeTable"
+            items="{/Employees}"
+            mode="SingleSelectLeft"
+            growing="true">
+
+            <columns>
+                <Column><Text text="ID"/></Column>
+                <Column><Text text="Name"/></Column>
+                <Column><Text text="Title"/></Column>
+                <Column><Text text="City"/></Column>
+                <Column><Text text="Phone"/></Column>
+                <Column><Text text="Email"/></Column>
+                <Column><Text text="Action"/></Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+
+                    <cells>
+                        <Text text="{EmployeeID}"/>
+                        <Text text="{= ${FirstName} + ' ' + ${LastName} }"/>
+                        <Text text="{Title}"/>
+                        <Text text="{City}"/>
+                        <Text text="{HomePhone}"/>
+                        <Text text="{= ${FirstName} + '.' + ${LastName} + '@company.com' }"/>
+
+                        <HBox>
+                            <Button
+                                icon="sap-icon://slim-arrow-right"
+                                type="Transparent"
+                                press="onNavigate"/>
+
+                            <Button
+                                icon="sap-icon://delete"
+                                type="Transparent"
+                                press="onDelete"/>
+                        </HBox>
+
+                    </cells>
+
+                </ColumnListItem>
+            </items>
+
+        </Table>
+
+    </content>
+
+</Page>
+</mvc:View>
