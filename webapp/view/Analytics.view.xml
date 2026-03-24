@@ -2,6 +2,7 @@
     controllerName="com.varun.project2.fioriproject.controller.Analytics"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
@@ -10,13 +11,27 @@
 
     <content>
 
-        <VBox class="sapUiMediumMargin">
+        <VBox class="sapUiMediumMargin" alignItems="Center">
 
-            <Title text="Monthly Attendance Histogram"/>
+            <!-- Header with dropdown right -->
+            <HBox width="100%" justifyContent="SpaceBetween" alignItems="Center">
+                <Title text="Monthly Attendance Histogram"/>
 
+                <Select id="quarterSelect" change="onQuarterChange" width="200px">
+                    <items>
+                        <core:Item key="Q1" text="Jan - Mar"/>
+                        <core:Item key="Q2" text="Apr - Jun"/>
+                        <core:Item key="Q3" text="Jul - Sep"/>
+                        <core:Item key="Q4" text="Oct - Dec"/>
+                    </items>
+                </Select>
+            </HBox>
+
+            <!-- Chart -->
             <viz:VizFrame
                 id="histogramChart"
                 vizType="column"
+                width="70%"
                 height="400px">
 
                 <viz:dataset>
@@ -25,18 +40,14 @@
                             <viz.data:DimensionDefinition name="Month" value="{month}"/>
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Present" value="{present}"/>
-                            <viz.data:MeasureDefinition name="Leave" value="{leave}"/>
-                            <viz.data:MeasureDefinition name="Half Day" value="{halfday}"/>
+                            <viz.data:MeasureDefinition name="Attendance" value="{total}"/>
                         </viz.data:measures>
                     </viz.data:FlattenedDataset>
                 </viz:dataset>
 
                 <viz:feeds>
-                    <viz.feeds:FeedItem uid="valueAxis" type="Measure"
-                        values="Present,Leave,Half Day"/>
-                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
-                        values="Month"/>
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Attendance"/>
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Month"/>
                 </viz:feeds>
 
             </viz:VizFrame>

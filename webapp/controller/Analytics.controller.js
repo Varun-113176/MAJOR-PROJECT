@@ -8,8 +8,7 @@ sap.ui.define([
 
         onInit: function () {
 
-            // 🔥 Sample Attendance Data (daily)
-            var attendanceData = [
+            this.attendanceData = [
                 { date: "2026-01-03", status: "Present" },
                 { date: "2026-01-04", status: "Leave" },
                 { date: "2026-01-05", status: "HalfDay" },
@@ -20,47 +19,70 @@ sap.ui.define([
 
                 { date: "2026-03-15", status: "Present" },
                 { date: "2026-03-16", status: "HalfDay" },
-                { date: "2026-03-17", status: "Present" }
+                { date: "2026-03-17", status: "Present" },
+
+                { date: "2026-07-01", status: "Present" },
+                { date: "2026-08-02", status: "Leave" },
+                { date: "2026-09-03", status: "Present" }
             ];
 
-            var chartData = this._prepareChartData(attendanceData);
-
-            var oModel = new JSONModel({
-                chartData: chartData
-            });
-
+            var oModel = new JSONModel();
             this.getView().setModel(oModel);
+
+            // Default Q1
+            var chartData = this._getQuarterData("Q1");
+            oModel.setProperty("/chartData", chartData);
         },
 
-        /* 🔥 Convert Daily → Monthly */
-        _prepareChartData: function (attendanceData) {
+        _getMonthName: function (m) {
+            var map = {
+                "01": "Jan", "02": "Feb", "03": "Mar",
+                "04": "Apr", "05": "May", "06": "Jun",
+                "07": "Jul", "08": "Aug", "09": "Sep",
+                "10": "Oct", "11": "Nov", "12": "Dec"
+            };
+            return map[m];
+        },
 
-            var result = {};
+        _getQuarterData: function (quarter) {
 
-            attendanceData.forEach(function (item) {
+            var quarterMap = {
+                Q1: ["01", "02", "03"],
+                Q2: ["04", "05", "06"],
+                Q3: ["07", "08", "09"],
+                Q4: ["10", "11", "12"]
+            };
 
-                var month = item.date.substring(0, 7); // YYYY-MM
+            var months = quarterMap[quarter];
 
-                if (!result[month]) {
-                    result[month] = {
-                        month: month,
-                        present: 0,
-                        leave: 0,
-                        halfday: 0
-                    };
+            // Always create 3 months
+            var result = months.map(function (m) {
+                return {
+                    month: this._getMonthName(m),
+                    total: 0
+                };
+            }.bind(this));
+
+            // Fill data
+            this.attendanceData.forEach(function (item) {
+                var m = item.date.substring(5, 7);
+
+                if (months.includes(m)) {
+                    var index = months.indexOf(m);
+                    result[index].total++;
                 }
-
-                if (item.status === "Present") {
-                    result[month].present++;
-                } else if (item.status === "Leave") {
-                    result[month].leave++;
-                } else if (item.status === "HalfDay") {
-                    result[month].halfday++;
-                }
-
             });
 
-            return Object.values(result);
+            return result;
+        },
+
+        onQuarterChange: function (oEvent) {
+
+            var selectedKey = oEvent.getSource().getSelectedKey();
+
+            var chartData = this._getQuarterData(selectedKey);
+
+            this.getView().getModel().setProperty("/chartData", chartData);
         }
 
     });
