@@ -6,7 +6,7 @@
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "title": "{{appTitle}}",
-    "description": "{{appDescription}",
+    "description": "{{appDescription}}",
 
     "applicationVersion": {
       "version": "0.0.1"
@@ -48,7 +48,9 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.varun.project2.fioriproject.i18n.i18n"
+          "bundleName": "com.varun.project2.fioriproject.i18n.i18n",
+          "supportedLocales": ["en"],
+          "fallbackLocale": "en"
         }
       },
 
