@@ -1,37 +1,62 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox"
+], function (Controller, JSONModel, MessageBox) {
     "use strict";
 
     return Controller.extend("com.varun.project2.fioriproject.controller.Analytics", {
 
         onInit: function () {
 
-            this.attendanceData = [
-                { date: "2026-01-03", status: "Present" },
-                { date: "2026-01-04", status: "Leave" },
-                { date: "2026-01-05", status: "HalfDay" },
+            this.empName = "Nancy Davolio";
 
-                { date: "2026-02-10", status: "Present" },
-                { date: "2026-02-11", status: "Present" },
-                { date: "2026-02-12", status: "Leave" },
-
-                { date: "2026-03-15", status: "Present" },
-                { date: "2026-03-16", status: "HalfDay" },
-                { date: "2026-03-17", status: "Present" },
-
-                { date: "2026-07-01", status: "Present" },
-                { date: "2026-08-02", status: "Leave" },
-                { date: "2026-09-03", status: "Present" }
-            ];
+            this.attendanceData = this._generateAttendance2026();
 
             var oModel = new JSONModel();
             this.getView().setModel(oModel);
 
-            // Default Q1
-            var chartData = this._getQuarterData("Q1");
-            oModel.setProperty("/chartData", chartData);
+            oModel.setProperty("/chartData", this._getYearData());
+
+            var oViz = this.getView().byId("histogramChart");
+
+            if (oViz) {
+                oViz.setVizProperties({
+                    plotArea: {
+                        dataLabel: { visible: true }
+                    }
+                });
+
+                oViz.attachSelectData(this.onBarSelect, this);
+            }
+        },
+
+        _generateAttendance2026: function () {
+
+            var data = [];
+            var start = new Date("2026-01-01");
+            var end = new Date("2026-12-31");
+
+            while (start <= end) {
+
+                var day = start.getDay();
+
+                if (day !== 0 && day !== 6) {
+
+                    var rand = Math.random();
+                    var status = rand < 0.7 ? "Present" : rand < 0.9 ? "HalfDay" : "Absent";
+
+                    data.push({
+                        date: start.toISOString().split("T")[0],
+                        status: status,
+                        employee: this.empName
+                    });
+                }
+
+                start.setDate(start.getDate() + 1);
+            }
+
+            return data;
         },
 
         _getMonthName: function (m) {
@@ -44,45 +69,60 @@ sap.ui.define([
             return map[m];
         },
 
-        _getQuarterData: function (quarter) {
+        _getYearData: function () {
 
-            var quarterMap = {
-                Q1: ["01", "02", "03"],
-                Q2: ["04", "05", "06"],
-                Q3: ["07", "08", "09"],
-                Q4: ["10", "11", "12"]
-            };
+            var result = [];
 
-            var months = quarterMap[quarter];
+            for (var m = 1; m <= 12; m++) {
 
-            // Always create 3 months
-            var result = months.map(function (m) {
-                return {
-                    month: this._getMonthName(m),
-                    total: 0
-                };
-            }.bind(this));
+                var monthStr = m.toString().padStart(2, "0");
+                var count = 0;
 
-            // Fill data
-            this.attendanceData.forEach(function (item) {
-                var m = item.date.substring(5, 7);
+                this.attendanceData.forEach(function (item) {
+                    if (item.date.substring(5, 7) === monthStr) {
+                        count++;
+                    }
+                });
 
-                if (months.includes(m)) {
-                    var index = months.indexOf(m);
-                    result[index].total++;
-                }
-            });
+                result.push({
+                    month: this._getMonthName(monthStr),
+                    total: count,
+                    monthNum: monthStr
+                });
+            }
 
             return result;
         },
 
-        onQuarterChange: function (oEvent) {
+        onBarSelect: function (oEvent) {
 
-            var selectedKey = oEvent.getSource().getSelectedKey();
+            var data = oEvent.getParameter("data")[0].data;
+            var month = data.monthNum;
 
-            var chartData = this._getQuarterData(selectedKey);
+            this._showHeatmap(month);
+        },
 
-            this.getView().getModel().setProperty("/chartData", chartData);
+        _showHeatmap: function (month) {
+
+            var days = [];
+
+            this.attendanceData.forEach(function (item) {
+                if (item.date.substring(5, 7) === month) {
+                    days.push(item);
+                }
+            });
+
+            var text = days.map(function (d) {
+                return d.date + " - " + d.status;
+            }).join("\n");
+
+            MessageBox.information(text, {
+                title: "Month " + month + " Attendance"
+            });
+        },
+
+        onQuarterChange: function () {
+            this.getView().getModel().setProperty("/chartData", this._getYearData());
         }
 
     });

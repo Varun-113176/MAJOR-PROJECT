@@ -13,11 +13,10 @@
 
         <VBox class="sapUiMediumMargin" alignItems="Center">
 
-            <!-- Header with dropdown right -->
-            <HBox width="100%" justifyContent="SpaceBetween" alignItems="Center">
+            <HBox width="100%" justifyContent="SpaceBetween">
                 <Title text="Monthly Attendance Histogram"/>
 
-                <Select id="quarterSelect" change="onQuarterChange" width="200px">
+                <Select selectedKey="Q1" change="onQuarterChange" width="200px">
                     <items>
                         <core:Item key="Q1" text="Jan - Mar"/>
                         <core:Item key="Q2" text="Apr - Jun"/>
@@ -27,7 +26,6 @@
                 </Select>
             </HBox>
 
-            <!-- Chart -->
             <viz:VizFrame
                 id="histogramChart"
                 vizType="column"
@@ -35,7 +33,7 @@
                 height="400px">
 
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/chartData}">
+                    <viz.data:FlattenedDataset data="{path:'/chartData'}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Month" value="{month}"/>
                         </viz.data:dimensions>
